@@ -11,10 +11,15 @@ npm run dev
 
 Open the local URL printed by Vite. Use `npm run build` to generate a production build in `dist/`, or `npm run preview` to serve that build locally.
 
-- Drag a ready process onto the CPU or select its card. It runs to completion, the simulated clock advances by its burst, and processes that arrived in the meantime join the ready queue.
-- Use **Wait until t = …** to advance the clock to the next arrival without running a process. The timeline records that interval as idle time.
-- Finish all five processes to see the final score and each process's results. **Restart round** resets the same workload so you can try a different order.
+Scheduler Lab has eight replayable puzzles. Review the workload and its goal, open the **Approach guide** for help, then choose any scheduling approach. Fill the CPU timeline one move at a time by clicking or dragging a ready task. A move that breaks the chosen rule counts as a mistake and leaves the clock where it is. **Show hint** reveals the next move. When the CPU has no ready tasks, use **Wait until tick …** to record an idle interval. Changing approaches starts the timeline over.
 
-Wait time is the number of ticks from arrival to start. Turnaround time is the number of ticks from arrival to completion. During play, both averages use completed processes. Finishing at the deadline counts as meeting it.
+- **FIFO** runs the earliest arriving ready task to completion.
+- **SJCF** runs the ready task with the shortest burst to completion.
+- **SRTCF** runs the ready task with the least time remaining until an arrival or completion. At equal remaining times the current task keeps the CPU.
+- **Round Robin** runs the front of the queue for up to one time slice. Arrivals during or at the end of that slice join before the unfinished task goes to the back.
 
-`src/App.jsx` contains the React game UI. `src/scheduler.js` handles simulation and scoring, and `src/workload.js` defines the practice round.
+Break other ties by arrival time, then task letter. After each attempt, the game compares all four approaches on the same workload and ranks them using that puzzle’s goal. A perfect solve uses a best-fit approach with zero mistakes and zero hints. The browser saves completed levels and perfect solves.
+
+Times are measured in ticks. Turnaround is completion minus arrival, wait is turnaround minus CPU burst, and response is first start minus arrival. An interruption counts when the CPU switches away from an unfinished task.
+
+`src/App.jsx` contains the React game UI, `src/scheduler.js` implements the rules and scoring, and `src/workload.js` defines the levels.
